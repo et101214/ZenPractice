@@ -19,8 +19,17 @@ jobs:
         run: flutter pub get
       - name: Generate code
         run: dart run build_runner build --delete-conflicting-outputs
-      - name: Report formatting
-        run: dart format --output=none lib test
+      - name: Format sources
+        run: dart format lib test
+      - name: Upload formatted sources
+        uses: actions/upload-artifact@v4
+        with:
+          name: formatted-sources
+          path: |
+            lib
+            test
+      - name: Verify formatting
+        run: git diff --exit-code
       - name: Analyze
         run: flutter analyze --no-fatal-infos --no-fatal-warnings
       - name: Test

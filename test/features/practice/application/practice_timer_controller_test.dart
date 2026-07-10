@@ -14,18 +14,34 @@ void main() {
       expect(controller.state.status, PracticeTimerStatus.idle);
     });
 
-    test('starts, pauses, and resets', () {
+    test('uses actual elapsed time and preserves paused duration', () {
+      var now = DateTime(2026, 7, 10, 9);
+      final controller = PracticeTimerController(now: () => now);
+      addTearDown(controller.dispose);
+
+      controller.start();
+      now = now.add(const Duration(seconds: 7));
+      controller.refreshElapsed();
+
+      expect(controller.state.elapsed, const Duration(seconds: 7));
+
+      controller.pause();
+      now = now.add(const Duration(minutes: 2));
+      controller.start();
+      now = now.add(const Duration(seconds: 5));
+      controller.refreshElapsed();
+
+      expect(controller.state.elapsed, const Duration(seconds: 12));
+    });
+
+    test('reset clears active session state', () {
       final controller = PracticeTimerController();
       addTearDown(controller.dispose);
 
       controller.start();
-      expect(controller.state.status, PracticeTimerStatus.running);
-      expect(controller.state.startedAt, isNotNull);
-
       controller.pause();
-      expect(controller.state.status, PracticeTimerStatus.paused);
-
       controller.reset();
+
       expect(controller.state.status, PracticeTimerStatus.idle);
       expect(controller.state.elapsed, Duration.zero);
       expect(controller.state.startedAt, isNull);

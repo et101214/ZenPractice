@@ -12,14 +12,14 @@ class DriftPracticeRepository implements PracticeRepository {
   @override
   Future<int> saveSession(PracticeSession session) {
     return _database.into(_database.practiceSessions).insert(
-      PracticeSessionsCompanion.insert(
-        practiceType: session.type.name,
-        durationSeconds: session.duration.inSeconds,
-        startedAt: session.startedAt,
-        completedAt: session.completedAt,
-        isSynced: Value(session.isSynced),
-      ),
-    );
+          PracticeSessionsCompanion.insert(
+            practiceType: session.type.name,
+            durationSeconds: session.duration.inSeconds,
+            startedAt: session.startedAt,
+            completedAt: session.completedAt,
+            isSynced: Value(session.isSynced),
+          ),
+        );
   }
 
   @override
@@ -29,8 +29,8 @@ class DriftPracticeRepository implements PracticeRepository {
       ..limit(limit);
 
     return query.watch().map(
-      (rows) => rows.map(_mapRow).toList(growable: false),
-    );
+          (rows) => rows.map(_mapRow).toList(growable: false),
+        );
   }
 
   @override
@@ -45,13 +45,34 @@ class DriftPracticeRepository implements PracticeRepository {
       );
 
     return query.watch().map(
-      (rows) => Duration(
-        seconds: rows.fold<int>(
-          0,
-          (total, row) => total + row.durationSeconds,
-        ),
-      ),
-    );
+          (rows) => Duration(
+            seconds: rows.fold<int>(
+              0,
+              (total, row) => total + row.durationSeconds,
+            ),
+          ),
+        );
+  }
+
+  @override
+  Future<List<PracticeSession>> getPendingSyncSessions({int limit = 50}) async {
+    final query = _database.select(_database.practiceSessions)
+      ..where((row) => row.isSynced.equals(false))
+      ..orderBy([(row) => OrderingTerm.asc(row.completedAt)])
+      ..limit(limit);
+
+    final rows = await query.get();
+    return rows.map(_mapRow).toList(growable: false);
+  }
+
+  @override
+  Future<void> markSessionsSynced(Iterable<int> sessionIds) async {
+    final ids = sessionIds.toList(growable: false);
+    if (ids.isEmpty) return;
+
+    await (_database.update(_database.practiceSessions)
+          ..where((row) => row.id.isIn(ids)))
+        .write(const PracticeSessionsCompanion(isSynced: Value(true)));
   }
 
   PracticeSession _mapRow(PracticeSessionRow row) {
