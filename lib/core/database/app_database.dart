@@ -3,6 +3,7 @@ import 'package:drift_flutter/drift_flutter.dart';
 
 part 'app_database.g.dart';
 
+@DataClassName('PracticeSessionRow')
 class PracticeSessions extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get practiceType => text()();
