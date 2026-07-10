@@ -42,11 +42,26 @@ class _AppShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const destinations = [
-      NavigationDestination(icon: Icon(Icons.home_outlined), label: '首頁'),
-      NavigationDestination(icon: Icon(Icons.self_improvement_outlined), label: '修行'),
-      NavigationDestination(icon: Icon(Icons.checklist_outlined), label: '功課'),
-      NavigationDestination(icon: Icon(Icons.menu_book_outlined), label: '經書'),
-      NavigationDestination(icon: Icon(Icons.emoji_events_outlined), label: '成就'),
+      NavigationDestination(
+        icon: Icon(Icons.home_outlined),
+        label: '首頁',
+      ),
+      NavigationDestination(
+        icon: Icon(Icons.self_improvement_outlined),
+        label: '修行',
+      ),
+      NavigationDestination(
+        icon: Icon(Icons.checklist_outlined),
+        label: '功課',
+      ),
+      NavigationDestination(
+        icon: Icon(Icons.menu_book_outlined),
+        label: '經書',
+      ),
+      NavigationDestination(
+        icon: Icon(Icons.emoji_events_outlined),
+        label: '成就',
+      ),
     ];
 
     return Scaffold(
