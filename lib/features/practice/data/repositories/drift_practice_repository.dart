@@ -54,7 +54,7 @@ class DriftPracticeRepository implements PracticeRepository {
     );
   }
 
-  PracticeSession _mapRow(PracticeSessionData row) {
+  PracticeSession _mapRow(PracticeSessionRow row) {
     return PracticeSession(
       id: row.id,
       type: PracticeType.values.byName(row.practiceType),
