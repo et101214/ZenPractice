@@ -6,4 +6,8 @@ abstract interface class PracticeRepository {
   Stream<List<PracticeSession>> watchRecentSessions({int limit = 20});
 
   Stream<Duration> watchTodayTotal(DateTime day);
+
+  Future<List<PracticeSession>> getPendingSyncSessions({int limit = 50});
+
+  Future<void> markSessionsSynced(Iterable<int> sessionIds);
 }
