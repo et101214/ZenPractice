@@ -38,9 +38,14 @@ class PracticeTimerState {
 }
 
 class PracticeTimerController extends StateNotifier<PracticeTimerState> {
-  PracticeTimerController() : super(const PracticeTimerState());
+  PracticeTimerController({DateTime Function()? now})
+      : _now = now ?? DateTime.now,
+        super(const PracticeTimerState());
 
+  final DateTime Function() _now;
   Timer? _timer;
+  DateTime? _runningSince;
+  Duration _elapsedBeforeRun = Duration.zero;
 
   void selectType(PracticeType type) {
     if (state.status != PracticeTimerStatus.idle) return;
@@ -49,32 +54,51 @@ class PracticeTimerController extends StateNotifier<PracticeTimerState> {
 
   void start() {
     if (state.isRunning) return;
-    final startedAt = state.startedAt ?? DateTime.now();
+
+    final currentTime = _now();
+    _elapsedBeforeRun = state.elapsed;
+    _runningSince = currentTime;
+
     state = state.copyWith(
       status: PracticeTimerStatus.running,
-      startedAt: startedAt,
+      startedAt: state.startedAt ?? currentTime,
     );
+
     _timer?.cancel();
-    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      state = state.copyWith(
-        elapsed: state.elapsed + const Duration(seconds: 1),
-      );
-    });
+    _timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (_) => refreshElapsed(),
+    );
+  }
+
+  void refreshElapsed() {
+    if (!state.isRunning || _runningSince == null) return;
+
+    final activeDuration = _now().difference(_runningSince!);
+    state = state.copyWith(elapsed: _elapsedBeforeRun + activeDuration);
   }
 
   void pause() {
     if (!state.isRunning) return;
+
+    refreshElapsed();
     _timer?.cancel();
+    _runningSince = null;
+    _elapsedBeforeRun = state.elapsed;
     state = state.copyWith(status: PracticeTimerStatus.paused);
   }
 
   void markCompleted() {
+    refreshElapsed();
     _timer?.cancel();
+    _runningSince = null;
     state = state.copyWith(status: PracticeTimerStatus.completed);
   }
 
   void reset() {
     _timer?.cancel();
+    _runningSince = null;
+    _elapsedBeforeRun = Duration.zero;
     state = PracticeTimerState(type: state.type);
   }
 
