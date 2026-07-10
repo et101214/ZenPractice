@@ -9,8 +9,8 @@ final practiceRepositoryProvider = Provider<PracticeRepository>((ref) {
   return DriftPracticeRepository(ref.watch(appDatabaseProvider));
 });
 
-final practiceTimerProvider = StateNotifierProvider<
-    PracticeTimerController, PracticeTimerState>((ref) {
+final practiceTimerProvider =
+    StateNotifierProvider<PracticeTimerController, PracticeTimerState>((ref) {
   return PracticeTimerController();
 });
 
