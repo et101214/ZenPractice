@@ -54,6 +54,27 @@ class DriftPracticeRepository implements PracticeRepository {
     );
   }
 
+  @override
+  Future<List<PracticeSession>> getPendingSyncSessions({int limit = 50}) async {
+    final query = _database.select(_database.practiceSessions)
+      ..where((row) => row.isSynced.equals(false))
+      ..orderBy([(row) => OrderingTerm.asc(row.completedAt)])
+      ..limit(limit);
+
+    final rows = await query.get();
+    return rows.map(_mapRow).toList(growable: false);
+  }
+
+  @override
+  Future<void> markSessionsSynced(Iterable<int> sessionIds) async {
+    final ids = sessionIds.toList(growable: false);
+    if (ids.isEmpty) return;
+
+    await (_database.update(_database.practiceSessions)
+          ..where((row) => row.id.isIn(ids)))
+        .write(const PracticeSessionsCompanion(isSynced: Value(true)));
+  }
+
   PracticeSession _mapRow(PracticeSessionRow row) {
     return PracticeSession(
       id: row.id,
