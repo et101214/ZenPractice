@@ -12,14 +12,14 @@ class DriftPracticeRepository implements PracticeRepository {
   @override
   Future<int> saveSession(PracticeSession session) {
     return _database.into(_database.practiceSessions).insert(
-          PracticeSessionsCompanion.insert(
-            practiceType: session.type.name,
-            durationSeconds: session.duration.inSeconds,
-            startedAt: session.startedAt,
-            completedAt: session.completedAt,
-            isSynced: Value(session.isSynced),
-          ),
-        );
+      PracticeSessionsCompanion.insert(
+        practiceType: session.type.name,
+        durationSeconds: session.duration.inSeconds,
+        startedAt: session.startedAt,
+        completedAt: session.completedAt,
+        isSynced: Value(session.isSynced),
+      ),
+    );
   }
 
   @override
@@ -29,8 +29,8 @@ class DriftPracticeRepository implements PracticeRepository {
       ..limit(limit);
 
     return query.watch().map(
-          (rows) => rows.map(_mapRow).toList(growable: false),
-        );
+      (rows) => rows.map(_mapRow).toList(growable: false),
+    );
   }
 
   @override
