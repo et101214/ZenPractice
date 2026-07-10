@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:zen_practice/features/practice/presentation/practice_page.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -9,18 +10,33 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       StatefulShellRoute.indexedStack(
         builder: (context, state, shell) => _AppShell(shell: shell),
         branches: [
-          _branch('/home', '首頁', Icons.home_outlined),
-          _branch('/practice', '修行', Icons.self_improvement_outlined),
-          _branch('/tasks', '功課', Icons.checklist_outlined),
-          _branch('/scriptures', '經書', Icons.menu_book_outlined),
-          _branch('/achievements', '成就', Icons.emoji_events_outlined),
+          _placeholderBranch('/home', '首頁', Icons.home_outlined),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/practice',
+                builder: (context, state) => const PracticePage(),
+              ),
+            ],
+          ),
+          _placeholderBranch('/tasks', '功課', Icons.checklist_outlined),
+          _placeholderBranch('/scriptures', '經書', Icons.menu_book_outlined),
+          _placeholderBranch(
+            '/achievements',
+            '成就',
+            Icons.emoji_events_outlined,
+          ),
         ],
       ),
     ],
   );
 });
 
-StatefulShellBranch _branch(String path, String title, IconData icon) {
+StatefulShellBranch _placeholderBranch(
+  String path,
+  String title,
+  IconData icon,
+) {
   return StatefulShellBranch(
     routes: [
       GoRoute(
