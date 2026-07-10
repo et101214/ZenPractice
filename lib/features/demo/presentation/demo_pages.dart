@@ -85,7 +85,7 @@ class ScripturesDemoPage extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: AppBar(title: const Text('經文')), 
+      appBar: AppBar(title: const Text('經文')),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
         children: [
