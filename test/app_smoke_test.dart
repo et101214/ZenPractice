@@ -10,6 +10,6 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('首頁'), findsWidgets);
-    expect(find.text('ZenPractice MVP 功能建置中'), findsOneWidget);
+    expect(find.text('禪院修行'), findsOneWidget);
   });
 }
