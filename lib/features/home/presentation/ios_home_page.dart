@@ -336,7 +336,8 @@ class _ZenLandscapePainter extends CustomPainter {
       ).createShader(Offset.zero & size);
     canvas.drawRect(Offset.zero & size, background);
 
-    final sun = Paint()..color = const Color(0xFFE4C68A).withValues(alpha: 0.72);
+    final sun = Paint()
+      ..color = const Color(0xFFE4C68A).withValues(alpha: 0.72);
     canvas.drawCircle(Offset(size.width * 0.76, size.height * 0.25), 34, sun);
 
     _drawMountain(
@@ -406,8 +407,10 @@ class _ZenLandscapePainter extends CustomPainter {
 
   void _drawTemple(Canvas canvas, Size size) {
     final center = Offset(size.width * 0.52, size.height * 0.51);
-    final body = Paint()..color = const Color(0xFF584B3F).withValues(alpha: 0.88);
-    final roof = Paint()..color = const Color(0xFF35443A).withValues(alpha: 0.95);
+    final body = Paint()
+      ..color = const Color(0xFF584B3F).withValues(alpha: 0.88);
+    final roof = Paint()
+      ..color = const Color(0xFF35443A).withValues(alpha: 0.95);
 
     canvas.drawRect(
       Rect.fromCenter(center: center, width: 42, height: 26),
@@ -416,8 +419,10 @@ class _ZenLandscapePainter extends CustomPainter {
 
     final roofPath = Path()
       ..moveTo(center.dx - 34, center.dy - 12)
-      ..quadraticBezierTo(center.dx, center.dy - 31, center.dx + 34, center.dy - 12)
-      ..quadraticBezierTo(center.dx, center.dy - 20, center.dx - 34, center.dy - 12)
+      ..quadraticBezierTo(
+          center.dx, center.dy - 31, center.dx + 34, center.dy - 12)
+      ..quadraticBezierTo(
+          center.dx, center.dy - 20, center.dx - 34, center.dy - 12)
       ..close();
     canvas.drawPath(roofPath, roof);
 
