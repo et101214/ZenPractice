@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:zen_practice/features/demo/presentation/demo_pages.dart';
 import 'package:zen_practice/features/practice/presentation/practice_page.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -10,7 +11,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       StatefulShellRoute.indexedStack(
         builder: (context, state, shell) => _AppShell(shell: shell),
         branches: [
-          _placeholderBranch('/home', '首頁', Icons.home_outlined),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/home',
+                builder: (context, state) => const HomeDemoPage(),
+              ),
+            ],
+          ),
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -19,36 +27,35 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               ),
             ],
           ),
-          _placeholderBranch('/tasks', '功課', Icons.checklist_outlined),
-          _placeholderBranch('/scriptures', '經書', Icons.menu_book_outlined),
-          _placeholderBranch(
-            '/achievements',
-            '成就',
-            Icons.emoji_events_outlined,
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/scriptures',
+                builder: (context, state) => const ScripturesDemoPage(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/ai',
+                builder: (context, state) => const AiDemoPage(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/profile',
+                builder: (context, state) => const ProfileDemoPage(),
+              ),
+            ],
           ),
         ],
       ),
     ],
   );
 });
-
-StatefulShellBranch _placeholderBranch(
-  String path,
-  String title,
-  IconData icon,
-) {
-  return StatefulShellBranch(
-    routes: [
-      GoRoute(
-        path: path,
-        builder: (context, state) => _PlaceholderPage(
-          title: title,
-          icon: icon,
-        ),
-      ),
-    ],
-  );
-}
 
 class _AppShell extends StatelessWidget {
   const _AppShell({required this.shell});
@@ -60,23 +67,28 @@ class _AppShell extends StatelessWidget {
     const destinations = [
       NavigationDestination(
         icon: Icon(Icons.home_outlined),
+        selectedIcon: Icon(Icons.home),
         label: '首頁',
       ),
       NavigationDestination(
         icon: Icon(Icons.self_improvement_outlined),
+        selectedIcon: Icon(Icons.self_improvement),
         label: '修行',
       ),
       NavigationDestination(
-        icon: Icon(Icons.checklist_outlined),
-        label: '功課',
-      ),
-      NavigationDestination(
         icon: Icon(Icons.menu_book_outlined),
-        label: '經書',
+        selectedIcon: Icon(Icons.menu_book),
+        label: '經文',
       ),
       NavigationDestination(
-        icon: Icon(Icons.emoji_events_outlined),
-        label: '成就',
+        icon: Icon(Icons.auto_awesome_outlined),
+        selectedIcon: Icon(Icons.auto_awesome),
+        label: 'AI',
+      ),
+      NavigationDestination(
+        icon: Icon(Icons.person_outline),
+        selectedIcon: Icon(Icons.person),
+        label: '我的',
       ),
     ];
 
@@ -88,38 +100,6 @@ class _AppShell extends StatelessWidget {
         onDestinationSelected: (index) => shell.goBranch(
           index,
           initialLocation: index == shell.currentIndex,
-        ),
-      ),
-    );
-  }
-}
-
-class _PlaceholderPage extends StatelessWidget {
-  const _PlaceholderPage({required this.title, required this.icon});
-
-  final String title;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      body: Center(
-        child: Card(
-          margin: const EdgeInsets.all(24),
-          child: Padding(
-            padding: const EdgeInsets.all(32),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(icon, size: 56),
-                const SizedBox(height: 16),
-                Text(title, style: Theme.of(context).textTheme.headlineSmall),
-                const SizedBox(height: 8),
-                const Text('ZenPractice MVP 功能建置中'),
-              ],
-            ),
-          ),
         ),
       ),
     );
