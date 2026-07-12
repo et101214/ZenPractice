@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:zen_practice/features/demo/presentation/demo_pages.dart';
+import 'package:zen_practice/features/home/presentation/ios_home_page.dart';
 import 'package:zen_practice/features/practice/presentation/practice_page.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -15,7 +16,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: '/home',
-                builder: (context, state) => const HomeDemoPage(),
+                builder: (context, state) => const IosHomePage(),
               ),
             ],
           ),
